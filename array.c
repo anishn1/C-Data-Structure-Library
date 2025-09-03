@@ -80,3 +80,46 @@ void resizeGeneralArray(GeneralArray *arr, int newCapacity) {
 	arr->data = realloc(arr->data, sizeof(void *) * newCapacity);
 	assert(arr->data != NULL);
 }
+
+void printGeneralArray(GeneralArray *arr, void (*printFunc)(void *)) {
+	for (int i = 0; i < arr->size; i++) {
+		printFunc(arr->data[i]);
+	}
+}
+
+bool containsGeneralArray(GeneralArray *arr, void *element, int (*compareFunc)(void *, void *)) {
+	for (int i = 0; i < arr->size; i++) {
+		if (compareFunc(arr->data[i], element) == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int indexOfGeneralArray(GeneralArray *arr, void *element, int (*compareFunc)(void *, void*)) {
+	for (int i = 0; i < arr->size; i++) {
+		if (compareFunc(arr->data[i], element) == 0) {
+			return i;
+		}
+	}
+  return -1;
+}
+
+void forEachGeneralArray(GeneralArray *arr, void (*func)(void *)) {
+	for (int i = 0; i < arr->size; i++) {
+		func(arr->data[i]);
+	}
+}
+
+static int (*userCmp)(void *elem1, void *elem2);
+
+static int qsortWrapper(const void *a, const void *b) {
+	void *pa = *(void **)a;
+	void *pb = *(void **)b;
+	return userCmp(pa, pb);
+}
+
+void sortGeneralArray(GeneralArray *arr, int (*compareFunc)(void *, void *)) {
+  userCmp = compareFunc;
+	qsort(arr->data, arr->size, sizeof(void *), qsortWrapper);
+}
