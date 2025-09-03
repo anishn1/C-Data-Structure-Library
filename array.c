@@ -81,12 +81,6 @@ void resizeGeneralArray(GeneralArray *arr, int newCapacity) {
 	assert(arr->data != NULL);
 }
 
-void printGeneralArray(GeneralArray *arr, void (*printFunc)(void *)) {
-	for (int i = 0; i < arr->size; i++) {
-		printFunc(arr->data[i]);
-	}
-}
-
 bool containsGeneralArray(GeneralArray *arr, void *element, int (*compareFunc)(void *, void *)) {
 	for (int i = 0; i < arr->size; i++) {
 		if (compareFunc(arr->data[i], element) == 0) {
