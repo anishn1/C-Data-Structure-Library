@@ -1,6 +1,11 @@
 
 #include "bst.h"
 
+#include <assert.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+
 BST *createBST(int (*compare)(void *, void *)) {
   BST *bst = malloc(sizeof(BST));
   bst->root = NULL;
@@ -22,7 +27,7 @@ void destroyBST(BST *bst) {
 }
 
 static BSTNode *createBSTNode(void *data) {
-  BSTNode *newNode = malloc(sizeof(node));
+  BSTNode *newNode = malloc(sizeof(BSTNode));
   newNode->data = data;
   newNode->left = NULL;
   newNode->right = NULL;
@@ -39,7 +44,7 @@ static BSTNode *insertBST(BSTNode *root, void *data, int (*compare)(void *, void
   } else {
     root->right = insertBST(root->right, data, compare);
   }
-  return root
+  return root;
 }
 
 void addBST(BST *bst, void *data) {
@@ -73,7 +78,7 @@ void *maxBST(BST *bst) {
   return curr->data;
 }
 
-static heightBSTNode(BSTNode *root) {
+static int heightBSTNode(BSTNode *root) {
   if (root == NULL) {
     return 0;
   }
@@ -89,23 +94,23 @@ int heightBST(BST *bst) {
   return heightBSTNode(bst->root);
 }
 
-static BSTNode *searchBSTNode(BSTNode *root, void *data) {
+static BSTNode *searchBSTNode(BSTNode *root, void *data, int (*compare)(void *, void *)) {
   if (root == NULL) {
     return NULL;
   }
   int cmp = compare(data, root->data);
   if (cmp < 0) {
-    return searchBSTNode(root->left, data);
-  } else if (cmp > 0) {
-    return searchBSTNode(root->right, data);
-  } else {
-    return root;
+    return searchBSTNode(root->left, data, compare);
   }
+  if (cmp > 0) {
+    return searchBSTNode(root->right, data, compare);
+  }
+  return root;
+
 }
 
-
 BSTNode *searchBST(BST *bst, void *data) {
-  searchBSTNode(bst->root, data);
+  return searchBSTNode(bst->root, data, bst->compare);
 }
 
 // Need to add forEach method for each traversal type
