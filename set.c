@@ -37,7 +37,7 @@ void destroyHashSet(HashSet *hs) {
 }
 
 static int getBucketIndex(HashSet *hs, void *key) {
-  return hs->hash(key) % hs->capacity;
+  return (int)hs->hash(key) % hs->capacity;
 }
 
 static void resizeHashSet(HashSet *hs) {
@@ -47,7 +47,7 @@ static void resizeHashSet(HashSet *hs) {
   for (int i = 0; i < hs->capacity; i++) {
     HashNode *curr = hs->buckets[i];
     while (curr != NULL) {
-      int newIndex = hs->hash(curr->key) % newCap;
+      int newIndex = (int)hs->hash(curr->key) % newCap;
       HashNode *nextNode = curr->next;
       curr->next = newBuckets[newIndex];
       newBuckets[newIndex] = curr;
@@ -108,6 +108,8 @@ void forEachHashSet(HashSet *hs, void (*func)(void *key)) {
 }
 
 HashSet *unionHashSet(HashSet *hs1, HashSet *hs2) {
+  assert(hs1 != NULL && hs2 != NULL);
+  assert(hs1->hash == hs2->hash && hs1->compare == hs2->compare);
   HashSet *hs = createHashSet(hs1->capacity, hs1->hash, hs1->compare);
   for (int i = 0; i < hs1->capacity; i++) {
     HashNode *curr = hs1->buckets[i];
@@ -122,4 +124,78 @@ HashSet *unionHashSet(HashSet *hs1, HashSet *hs2) {
     }
   }
   return hs;
+}
+
+void removeHashSet(HashSet *hs, void *key) {
+  assert(hs != NULL);
+  assert(hs->size > 0);
+  int index = getBucketIndex(hs, key);
+  HashNode *curr = hs->buckets[index];
+  HashNode *next = curr->next;
+  if (hs->compare(curr->key, key) == 0) {
+    hs->buckets[index] = curr->next;
+    free(curr);
+    hs->size--;
+    return;
+  }
+  while (next != NULL) {
+    if (hs->compare(next->key,key) == 0) {
+      curr->next = next->next;
+      free(next);
+      hs->size--;
+      return;
+    }
+    curr = next;
+    next = curr->next;
+  }
+}
+
+HashSet *intersectHashSet(HashSet *hs1, HashSet *hs2) {
+  assert(hs1 != NULL && hs2 != NULL);
+  assert(hs1->hash == hs2->hash && hs1->compare == hs2->compare);
+  HashSet *hs = createHashSet(hs1->capacity, hs1->hash, hs1->compare);
+  for (int i = 0; i < hs1->capacity; i++) {
+    HashNode *curr = hs1->buckets[i];
+    while (curr != NULL) {
+      if (containsHashSet(hs2, curr->key)) {
+        addHashSet(hs, curr->key);
+      }
+      curr = curr->next;
+    }
+  }
+  return hs;
+}
+
+HashSet *differenceHashSet(HashSet *hs1, HashSet *hs2) {
+  assert(hs1 != NULL && hs2 != NULL);
+  assert(hs1->hash == hs2->hash && hs1->compare == hs2->compare);
+  HashSet *hs = createHashSet(hs1->capacity, hs1->hash, hs1->compare);
+  for (int i = 0; i < hs1->capacity; i++) {
+    HashNode *curr = hs1->buckets[i];
+    while (curr != NULL) {
+      if (!containsHashSet(hs2, curr->key)) {
+        addHashSet(hs, curr->key);
+      }
+      curr = curr->next;
+    }
+  }
+  return hs;
+}
+
+void addAllHashSet(HashSet *hs1, HashSet *hs2) {
+  for (int i = 0; i < hs2->capacity; i++) {
+    HashNode *curr = hs2->buckets[i];
+    while (curr != NULL) {
+      addHashSet(hs1, curr->key);
+    }
+  }
+}
+
+HashSet *symmetricDifferenceHashSet(HashSet *hs1, HashSet *hs2) {
+  HashSet *unionHS = unionHashSet(hs1, hs2);
+  HashSet *interHS = intersectHashSet(hs1, hs2);
+  HashSet *diffHS = differenceHashSet(unionHS, interHS);
+  destroyHashSet(unionHS);
+  destroyHashSet(interHS);
+  return diffHS;
 }
