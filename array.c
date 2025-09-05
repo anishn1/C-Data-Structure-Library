@@ -8,9 +8,13 @@
 GeneralArray *createGeneralArray(int capacity) {
 	GeneralArray *arr = malloc(sizeof(GeneralArray));
 	assert(arr != NULL);
-	arr->capacity = capacity;
+    if (capacity <= 0) {
+      arr->capacity = 16;
+    } else {
+	  arr->capacity = capacity;
+    }
 	arr->size = 0;
-	arr->data = malloc(sizeof(void *) * capacity);
+	arr->data = malloc(sizeof(void *) * arr->capacity);
 	assert(arr->data != NULL);
 	return arr;
 }
