@@ -1,6 +1,7 @@
 
 #include "testArray.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "array.h"
@@ -8,6 +9,12 @@
 int numTests = 0;
 int numPassed = 0;
 int numFailed = 0;
+
+static int intCmp(void *elem1, void *elem2) {
+  int e1 = *(int *)elem1;
+  int e2 = *(int *)elem2;
+  return e1 - e2;
+}
 
 void testAddGet(int a, int b, int c, int d) {
   numTests++;
@@ -22,8 +29,10 @@ void testAddGet(int a, int b, int c, int d) {
   int v4 = *(int *)getGeneralArray(arr, 3);
   if (v1 == a && v2 == b && v3 == c && v4 == d) {
     numPassed++;
+    printf("PASSED: testAddGet\n");
   } else {
     numFailed++;
+    printf("FAILED: testAddGet\n");
   }
   destroyGeneralArray(arr);
 }
@@ -38,8 +47,10 @@ void testAddSize(int num) {
   }
   if (arr->size == num) {
     numPassed++;
+    printf("PASSED: testAddSize\n");
   } else {
     numFailed++;
+    printf("FAILED: testAddSize\n");
   }
   forEachGeneralArray(arr, free);
   destroyGeneralArray(arr);
@@ -54,19 +65,33 @@ void testRemoveContains() {
     addGeneralArray(arr, val);
   }
 
-  removeGeneralArray(arr, 5);
-  if (!containsGeneralArray(arr, 5)) {
+  int *element = removeGeneralArray(arr, 5);
+  int checkVal = *element;
+  if (!containsGeneralArray(arr, &checkVal, intCmp)) {
     numPassed++;
+    printf("PASSED: testRemoveContains\n");
   } else {
+    printf("FAILED: testRemoveContains\n");
     numFailed++;
   }
+  free(element);
   forEachGeneralArray(arr, free);
   destroyGeneralArray(arr);
 }
 
-void main() {
+void testSummary() {
+  printf("\n--------------------------------\n");
+  printf("Number of tests: %d\n", numTests);
+  printf("Passed: %d\n", numPassed);
+  printf("Failed: %d\n", numFailed);
+}
+
+
+int main() {
   testAddGet(1, 2, 3, 4);
   testAddGet(300, 400, 500, 600);
   testAddSize(3);
   testAddSize(30);
+  testRemoveContains();
+  testSummary();
 }

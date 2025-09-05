@@ -47,12 +47,14 @@ int sizeGeneralArray(GeneralArray *arr) {
 	return arr->size;
 }
 
-void removeGeneralArray(GeneralArray *arr, int index) {
+void *removeGeneralArray(GeneralArray *arr, int index) {
 	assert(index >= 0 && index < arr->size);
+	void *element = arr->data[index];
 	for (int i = index; i < arr->size - 1; i++) {
 		arr->data[i] = arr->data[i + 1];
 	}
 	arr->size--;
+	return element;
 }
 
 void *popGeneralArray(GeneralArray *arr) {
