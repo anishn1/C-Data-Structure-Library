@@ -24,5 +24,4 @@ int sizeStack(Stack *stack);
 void clearStack(Stack *stack);
 void forEachStack(Stack *stack, void (*func)(void *));
 
-
 #endif //STACK_H

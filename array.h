@@ -2,6 +2,8 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
+#include <stdbool.h>
+
 typedef struct {
   void **data;
   int size;

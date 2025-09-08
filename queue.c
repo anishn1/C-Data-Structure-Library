@@ -1,6 +1,10 @@
 
 #include "queue.h"
 
+#include <assert.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
 Queue *createQueue(int capacity) {
   Queue *queue = malloc(sizeof(Queue));
   assert(queue != NULL);
@@ -11,7 +15,7 @@ Queue *createQueue(int capacity) {
   queue->data = malloc(queue->capacity * sizeof(void *));
   assert(queue->data != NULL);
   queue->size = 0;
-  queue->head = null;
+  queue->head = 0;
   queue->tail = 0;
   return queue;
 }
@@ -62,7 +66,7 @@ bool enqueue(Queue *queue, void *data) {
   return true;
 }
 
-void forEachQueue(Queue *queue, void (*function)(void *elem)) {
+void forEachQueue(Queue *queue, void (*func)(void *elem)) {
   for (int i = queue->head; i != queue->tail; i = (i + 1) % queue->capacity) {
     func(queue->data[i]);
   }

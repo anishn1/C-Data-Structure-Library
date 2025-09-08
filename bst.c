@@ -113,43 +113,43 @@ BSTNode *searchBST(BST *bst, void *data) {
   return searchBSTNode(bst->root, data, bst->compare);
 }
 
-static void forEachBSTNode(BSTNode *root, void (*func)(void *)) {
-    if (root == NULL) {
-		return;
-	}
-	func(root->data);
-	forEachBSTNode(root->left, func);
-	forEachBSTNode(root->right, func);
+static void forEachPreBSTNode(BSTNode *root, void (*func)(void *)) {
+  if (root == NULL) {
+    return;
+  }
+  func(root->data);
+  forEachPreBSTNode(root->left, func);
+  forEachPreBSTNode(root->right, func);
 }
 
-void forEachBST(BST *bst, void (*func)(void *data)) {
-	forEachBSTNode(bst->root, func);
+void forEachPreBST(BST *bst, void (*func)(void *data)) {
+  forEachPreBSTNode(bst->root, func);
 }
 
-static void forEachBSTNode(BSTNode *root, void (*func)(void *)) {
-    if (root == NULL) {
-		return;
-	}
-	func(root->data);
-	forEachBSTNode(root->left, func);
-	forEachBSTNode(root->right, func);
+static void forEachInBSTNode(BSTNode *root, void (*func)(void *)) {
+  if (root == NULL) {
+    return;
+  }
+  forEachInBSTNode(root->left, func);
+  func(root->data);
+  forEachInBSTNode(root->right, func);
 }
 
-void forEachBST(BST *bst, void (*func)(void *data)) {
-	forEachBSTNode(bst->root, func);
+void forEachInBST(BST *bst, void (*func)(void *data)) {
+  forEachInBSTNode(bst->root, func);
 }
 
-static void forEachBSTNode(BSTNode *root, void (*func)(void *)) {
-    if (root == NULL) {
-		return;
-	}
-	func(root->data);
-	forEachBSTNode(root->left, func);
-	forEachBSTNode(root->right, func);
+static void forEachPostBSTNode(BSTNode *root, void (*func)(void *)) {
+  if (root == NULL) {
+    return;
+  }
+  forEachPostBSTNode(root->left, func);
+  forEachPostBSTNode(root->right, func);
+  func(root->data);
 }
 
-void forEachBST(BST *bst, void (*func)(void *data)) {
-	forEachBSTNode(bst->root, func);
+void forEachPostBST(BST *bst, void (*func)(void *data)) {
+  forEachPostBSTNode(bst->root, func);
 }
 
 
