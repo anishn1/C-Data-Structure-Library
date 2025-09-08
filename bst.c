@@ -113,4 +113,44 @@ BSTNode *searchBST(BST *bst, void *data) {
   return searchBSTNode(bst->root, data, bst->compare);
 }
 
+static void forEachBSTNode(BSTNode *root, void (*func)(void *)) {
+    if (root == NULL) {
+		return;
+	}
+	func(root->data);
+	forEachBSTNode(root->left, func);
+	forEachBSTNode(root->right, func);
+}
+
+void forEachBST(BST *bst, void (*func)(void *data)) {
+	forEachBSTNode(bst->root, func);
+}
+
+static void forEachBSTNode(BSTNode *root, void (*func)(void *)) {
+    if (root == NULL) {
+		return;
+	}
+	func(root->data);
+	forEachBSTNode(root->left, func);
+	forEachBSTNode(root->right, func);
+}
+
+void forEachBST(BST *bst, void (*func)(void *data)) {
+	forEachBSTNode(bst->root, func);
+}
+
+static void forEachBSTNode(BSTNode *root, void (*func)(void *)) {
+    if (root == NULL) {
+		return;
+	}
+	func(root->data);
+	forEachBSTNode(root->left, func);
+	forEachBSTNode(root->right, func);
+}
+
+void forEachBST(BST *bst, void (*func)(void *data)) {
+	forEachBSTNode(bst->root, func);
+}
+
+
 // Need to add forEach method for each traversal type
