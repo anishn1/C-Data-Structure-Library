@@ -1,8 +1,10 @@
 
 #include "binheap.h"
-#include "array.h"
+#include <stdbool.h>
 #include <assert.h>
 #include <stdlib.h>
+
+#include "array.h"
 
 BinHeap* createHeap(int capacity, int (*cmp)(void*, void*)) {
   BinHeap* heap = malloc(sizeof(BinHeap));
@@ -68,4 +70,21 @@ void *extractHeap(BinHeap *h) {
   removeGeneralArray(h->arr, h->arr->size - 1);
   heapify_down(h, 0);
   return data;
+}
+
+int sizeHeap(BinHeap* h) {
+  return h->arr->size;
+}
+
+bool isEmptyHeap(BinHeap* h) {
+  return h->arr->size == 0;
+}
+
+GeneralArray *heapSort(BinHeap *h) {
+  int n = h->arr->size;
+  GeneralArray *arr = createGeneralArray(n);
+  for (int i = 0; i < n; i++) {
+    addGeneralArray(arr, extractHeap(h));
+  }
+  return arr;
 }
