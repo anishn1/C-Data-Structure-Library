@@ -64,9 +64,11 @@ void *popArray(Array *arr) {
 	return element;
 }
 
-void setArray(Array *arr, void *element, int index) {
+void *setArray(Array *arr, void *element, int index) {
 	assert(index >= 0 && index < arr->size);
+	void *elem = arr->data[index];
 	arr->data[index] = element;
+	return elem;
 }
 
 void insertArray(Array *arr, void *element, int index) {

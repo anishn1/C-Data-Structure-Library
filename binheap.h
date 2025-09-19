@@ -10,7 +10,7 @@ typedef struct {
 } BinHeap;
 
 BinHeap* createHeap(int capacity, int (*cmp)(void*, void*));
-void destroyHeap(BinHeap* heap);
+void destroyHeap(BinHeap* heap, void (*freeFunc)(void *));
 void insertHeap(BinHeap* h, void *data);
 void *extractHeap(BinHeap *h);
 int sizeHeap(BinHeap* h);

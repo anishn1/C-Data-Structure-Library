@@ -15,7 +15,7 @@ void destroyArray(Array *arr, void (*freeFunc)(void *));
 void addArray(Array *arr, void *element);
 void *removeArray(Array *arr, int index);
 void *getArray(Array *arr, int index);
-void setArray(Array *arr, void *element, int index);
+void *setArray(Array *arr, void *element, int index);
 bool isEmptyArray(Array *arr);
 int sizeArray(Array *arr);
 void *popArray(Array *arr);

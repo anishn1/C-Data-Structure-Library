@@ -130,6 +130,121 @@ void testPopSize() {
     *val = i;
     addArray(arr, val);
   }
+  int size = 32;
+  bool check = true;
+  for (int i = 0; i < 32; i++) {
+    int *element = popArray(arr);
+    if (*element != i || size != 31 - i) {
+      check = false;
+    }
+  }
+  if (check) {
+    numPassed++;
+    printf("PASSED: testPopSize\n");
+  } else {
+    numFailed++;
+    printf("FAILED: testPopSize\n");
+  }
+}
+
+void testIndexGet() {
+  numTests++;
+  Array *arr = createArray(16);
+  for (int i = 0; i < 32; i++) {
+    int *val = malloc(sizeof(int));
+    *val = i;
+    addArray(arr, val);
+  }
+  int *search = malloc(sizeof(int));
+  *search = 8;
+  int index = indexOfArray(arr, search, intCmp);
+  free(search);
+  if (*(int *)getArray(arr, index) == 8) {
+    numPassed++;
+    printf("PASSED: testIndexGet\n");
+  } else {
+    numFailed++;
+    printf("FAILED: testIndexGet\n");
+  }
+  destroyArray(arr, free);
+}
+
+void testSetGet() {
+  numTests++;
+  Array *arr = createArray(16);
+  for (int i = 0; i < 32; i++) {
+    int *val = malloc(sizeof(int));
+    *val = i;
+    addArray(arr, val);
+  }
+  int *new  = malloc(sizeof(int));
+  *new = 121;
+  void *old = setArray(arr, new, 4);
+  free(old);
+  if (*(int *)getArray(arr, 4) == 121) {
+    numPassed++;
+    printf("PASSED: testSetGet\n");
+  } else {
+    numFailed++;
+    printf("FAILED: testSetGet\n");
+  }
+  destroyArray(arr, free);
+}
+
+static int sum = 0;
+
+void sumFunc(void *elem) {
+  sum += *(int *)elem;
+}
+
+void testForEach() {
+  numTests++;
+  Array *arr = createArray(16);
+  int check = 0;
+  for (int i = 0; i < 32; i++) {
+    int *val = malloc(sizeof(int));
+    *val = i;
+    check += i;
+    addArray(arr, val);
+  }
+  forEachArray(arr, sumFunc);
+  if (sum == check) {
+    numPassed++;
+    printf("PASSED: testForEach\n");
+  } else {
+    numFailed++;
+    printf("FAILED: testForEach\n");
+  }
+  destroyArray(arr, free);
+}
+
+void doubleFunc(void *elem) {
+  *(int *)elem *= 2;
+}
+
+void testForEachModify() {
+  numTests++;
+  Array *arr = createArray(16);
+  for (int i = 0; i < 32; i++) {
+    int *val = malloc(sizeof(int));
+    *val = i;
+    addArray(arr, val);
+  }
+  forEachArray(arr, doubleFunc);
+  bool check = true;
+  for (int i = 0; i < 32; i++) {
+    if (*(int *)getArray(arr, i) != 2*i) {
+      check = false;
+    }
+  }
+  if (check) {
+    numPassed++;
+    printf("PASSED: testForEachModify\n");
+  } else {
+    numFailed++;
+    printf("FAILED: testForEachModify\n");
+  }
+  destroyArray(arr, free);
 }
 
 void testSummary() {
@@ -139,12 +254,18 @@ void testSummary() {
   printf("Failed: %d\n", numFailed);
 }
 
-
 int main() {
   testAddGet(1, 2, 3, 4);
   testAddGet(300, 400, 500, 600);
   testAddSize(3);
   testAddSize(30);
   testRemoveContains();
+  testRemoveEmpty();
+  testClearEmpty();
+  testPopSize();
+  testIndexGet();
+  testSetGet();
+  testForEach();
+  testForEachModify();
   testSummary();
 }
