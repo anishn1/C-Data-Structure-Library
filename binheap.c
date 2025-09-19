@@ -9,14 +9,14 @@
 BinHeap* createHeap(int capacity, int (*cmp)(void*, void*)) {
   BinHeap* heap = malloc(sizeof(BinHeap));
   assert(heap != NULL);
-  heap->arr = createGeneralArray(capacity);
+  heap->arr = createArray(capacity);
   assert(heap->arr != NULL);
   heap->cmp = cmp;
   return heap;
 }
 
-void destroyHeap(BinHeap* heap) {
-  destroyGeneralArray(heap->arr);
+void destroyHeap(BinHeap* heap, void (*freeFunc)(void *)) {
+  destroyArray(heap->arr, freeFunc);
   free(heap);
 }
 
@@ -36,7 +36,7 @@ void heapify_up(BinHeap* h, int index) {
 }
 
 void insertHeap(BinHeap* h, void *data) {
-  addGeneralArray(h->arr, data);
+  addArray(h->arr, data);
   heapify_up(h, h->arr->size - 1);
 }
 
@@ -65,9 +65,9 @@ void heapify_down(BinHeap* h, int index) {
 
 void *extractHeap(BinHeap *h) {
   assert(h->arr->size > 0);
-  void *data = getGeneralArray(h->arr, 0);
+  void *data = getArray(h->arr, 0);
   h->arr->data[0] = h->arr->data[h->arr->size - 1];
-  removeGeneralArray(h->arr, h->arr->size - 1);
+  removeArray(h->arr, h->arr->size - 1);
   heapify_down(h, 0);
   return data;
 }
@@ -80,11 +80,11 @@ bool isEmptyHeap(BinHeap* h) {
   return h->arr->size == 0;
 }
 
-GeneralArray *heapSort(BinHeap *h) {
+Array *heapSort(BinHeap *h) {
   int n = h->arr->size;
-  GeneralArray *arr = createGeneralArray(n);
+  Array *arr = createArray(n);
   for (int i = 0; i < n; i++) {
-    addGeneralArray(arr, extractHeap(h));
+    addArray(arr, extractHeap(h));
   }
   return arr;
 }

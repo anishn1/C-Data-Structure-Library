@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 typedef struct {
-  GeneralArray *arr;
+  Array *arr;
   int (*cmp)(void *, void *);
 } BinHeap;
 
@@ -15,6 +15,6 @@ void insertHeap(BinHeap* h, void *data);
 void *extractHeap(BinHeap *h);
 int sizeHeap(BinHeap* h);
 bool isEmptyHeap(BinHeap* h);
-GeneralArray *heapSort(BinHeap *h);
+Array *heapSort(BinHeap *h);
 
 #endif //BINHEAP_H
