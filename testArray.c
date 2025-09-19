@@ -1,5 +1,4 @@
 
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,10 +17,18 @@ static int intCmp(void *elem1, void *elem2) {
 void testAddGet(int a, int b, int c, int d) {
   numTests++;
   Array *arr = createArray(5);
-  addArray(arr, &a);
-  addArray(arr, &b);
-  addArray(arr, &c);
-  addArray(arr, &d); // [5,1,2,9]
+  int *pa = malloc(sizeof(int));
+  *pa = a;
+  int *pb = malloc(sizeof(int));
+  *pb = b;
+  int *pc = malloc(sizeof(int));
+  *pc = c;
+  int *pd = malloc(sizeof(int));
+  *pd = d;
+  addArray(arr, pa);
+  addArray(arr, pb);
+  addArray(arr, pc);
+  addArray(arr, pd);
   int v1 = *(int *)getArray(arr, 0);
   int v2 = *(int *)getArray(arr, 1);
   int v3 = *(int *)getArray(arr, 2);
@@ -84,10 +91,11 @@ void testRemoveEmpty() {
     *val = i;
     addArray(arr, val);
   }
+//arr[data[31]]
   bool check = true;
-  for (int i = 32; i > 0; i++) {
-    int *element = removeArray(arr, i-1);
-    if (*element != (i-1)) {
+  for (int i = 31; i >= 0; i--) {
+    int *element = removeArray(arr, i);
+    if (*element != (i)) {
       check = false;
     }
     free(element);
@@ -129,13 +137,13 @@ void testPopSize() {
     *val = i;
     addArray(arr, val);
   }
-  int size = 32;
   bool check = true;
-  for (int i = 0; i < 32; i++) {
+  for (int i = 31; i >= 0; i--) {
     int *element = popArray(arr);
-    if (*element != i || size != 31 - i) {
+    if (*element != i || sizeArray(arr) != i) {
       check = false;
     }
+    free(element);
   }
   if (check) {
     numPassed++;
@@ -214,6 +222,7 @@ void testForEach() {
     numFailed++;
     printf("FAILED: testForEach\n");
   }
+  sum = 0;
   destroyArray(arr, free);
 }
 

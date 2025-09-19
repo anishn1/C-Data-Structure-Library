@@ -54,6 +54,7 @@ void *removeArray(Array *arr, int index) {
 	for (int i = index; i < arr->size - 1; i++) {
 		arr->data[i] = arr->data[i + 1];
 	}
+	arr->data[arr->size - 1] = NULL;
 	arr->size--;
 	return element;
 }
